@@ -1,0 +1,258 @@
+<!doctype html>
+
+<html lang="en-US">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>Experiment</title>
+</head>
+
+
+<body style="background: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);" onload="setup()">
+
+    <script>
+
+        function setup() {
+
+            var warningText = document.getElementById("warning")
+            warningText.style.color = "white";
+
+            var currentIndex = localStorage.getItem("currentIndex");
+            var trial = currentIndex
+            localStorage.setItem("currentIndex", Number(currentIndex) + 1);
+            var indicies = JSON.parse("[" + localStorage.getItem("indicies") + "]");
+
+            document.getElementById('progress_text').innerText = 'Trial ' + (Number(trial) + 1).toString() + ' of ' + indicies.length.toString()
+        }
+
+        function isBlank(str) {
+
+            return (!str || str.trim().length === 0 || str === "");
+        }
+
+        function verifyAnswers() {
+
+            var q1Checkboxes = document.getElementsByName("check1")
+            var q1Otherbox = document.getElementById("other1")
+            var q2Checkboxes = document.getElementsByName("check2")
+            var q3Checkboxes = document.getElementsByName("check3")
+            var q1Checked = false
+            var q2Checked = false
+            var q3Checked = false
+
+            q1Checkboxes.forEach((item) => {
+                q1Checked = q1Checked || item.checked
+            })
+
+            q1Checked = q1Checked || !isBlank(q1Otherbox.value)
+
+            q2Checkboxes.forEach((item) => {
+                q2Checked = q2Checked || item.checked
+            })
+
+            q3Checkboxes.forEach((item) => {
+                q3Checked = q3Checked || item.checked
+            })
+
+
+            return q1Checked && q2Checked && q3Checked
+        }
+
+        function moveToNextTrial() {
+
+            var answersValid = verifyAnswers()
+
+            if (!answersValid) {
+
+                var warningText = document.getElementById("warning")
+                warningText.style.color = "red";
+            } else {
+
+                //Move
+                var warningText = document.getElementById("warning")
+                warningText.style.color = "white";
+
+                var currentIndex = localStorage.getItem("currentIndex");
+                var indicies = JSON.parse("[" + localStorage.getItem("indicies") + "]");
+
+                console.log(currentIndex)
+
+                if (currentIndex == indicies.length) {
+
+                     window.location = "end.html"
+                } else {
+
+                    var nextTrial = indicies[currentIndex]
+                    console.log(nextTrial)
+                    var nextHTML = "trial_" + nextTrial + ".html"
+
+                    window.location = nextHTML
+                }
+            }
+        }
+
+        function onlyOne(checkbox) {
+
+            value = localStorage.getItem("indicies");
+
+            var checkboxes = document.getElementsByName(checkbox.name)
+            checkboxes.forEach((item) => {
+                console.log('uncheck')
+                if (item !== checkbox) item.checked = false
+            })
+        }
+    </script>
+
+    <div style="position: sticky; top: 0; background-color: #ffffff; margin-top: 50px;">
+    <!-- <header style="text-align: center;"> -->
+        <p style="text-align: center;" id="progress_text">
+            
+        </p>
+        <hr style="width: 80%; border-color: #dddddd;"/>
+    <!-- </header> -->
+    </div>
+
+    <div id="main-wrap">
+    
+    <!-- The main header used across all the pages of our website -->
+
+    <div id="left-side"></div>
+    <div id="content">
+
+
+    <div id="wrapper">
+        <figure>
+            <img src=stimuli/1_ref.png alt="Reference" style="width:100%" id="img1">
+            <figcaption> <b>(A)</b> </figcaption>
+        </figure>
+
+        <figure>
+            <img src=stimuli/1_dist.png alt="Reference" style="width:100%;" id="img1">
+            <figcaption> <b>(B)</b> </figcaption>
+        </figure>
+    </div>
+
+    <hr style="width: 80%; border-color: #dddddd;"/>
+
+
+    <p style="text-align: left; font-size: 18px; margin-left: 20%;">
+        <b>Question 1</b>
+    </p>
+    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
+
+        Which of the following options best describes how image (B) is different from image (A)?
+    </p>
+
+    <div id="list">
+    <b>Scene content has changed</b>
+        <p style="margin-left: 5%;">
+
+            <label class="checkbox-container">Lighting has changed
+                <input type="checkbox" checked="checked" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container">Objects have changed
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container">Lighting and objects have changed
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+        </p>
+    
+
+    <b>Image has been modified</b>
+
+        <p style="margin-left: 5%;"">
+            <label class="checkbox-container">Camera settings have changed
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container">Image has been digitally altered ('photoshopped')
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+        </p>
+
+    <b>Other</b>
+
+        <p style="margin-left: 5%;" >
+            <input type="text" id="other1" name="other1" style="margin-left: 10px;" size="100">
+            <label for="other1" style="float: left; font-size: 14px;">(Please specify)</label>
+        </p>
+    </div>
+
+
+    <hr style="width: 80%; border-color: #dddddd;"/>
+
+
+    <p style="text-align: left; font-size: 18px; margin-left: 20%;">
+        <b>Question 2</b>
+    </p>
+    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
+
+        Does image (A) appear natural?
+    </p>
+
+    <div id="list">
+    <p style="margin-left: 5%;"">
+        <label class="checkbox-container">Yes
+            <input type="checkbox" checked="checked" name="check2" onclick="onlyOne(this)" >
+            <span class="checkmark"></span>
+        </label>
+
+        <label class="checkbox-container">No
+            <input type="checkbox" name="check2" onclick="onlyOne(this)" >
+            <span class="checkmark"></span>
+        </label>
+    </p>
+    </div>
+
+    <hr style="width: 80%; border-color: #dddddd;"/>
+
+
+    <p style="text-align: left; font-size: 18px; margin-left: 20%;">
+        <b>Question 3</b>
+    </p>
+    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
+
+        Does image (B) appear natural?
+    </p>
+
+    <div id="list">
+    <p style="margin-left: 5%;"">
+        <label class="checkbox-container">Yes
+            <input type="checkbox" checked="checked" name="check3" onclick="onlyOne(this)" >
+            <span class="checkmark"></span>
+        </label>
+
+        <label class="checkbox-container">No
+            <input type="checkbox" name="check3" onclick="onlyOne(this)" >
+            <span class="checkmark"></span>
+        </label>
+    </p>
+    </div>
+
+    <hr style="width: 80%; border-color: #dddddd;"/>
+
+    <div style="text-align: center;">
+        <button type="button" onclick="moveToNextTrial()">Submit</button>
+        <p id="warning" style="color: black; font-size: 14px;">
+            (Please answer all questions)
+        </p>
+    </div>
+
+    </div>
+    <div id="right-side"></div>
+    
+    </div>
+</body>
+
+</html>

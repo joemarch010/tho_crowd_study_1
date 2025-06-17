@@ -1,0 +1,68 @@
+<!doctype html>
+
+<html lang="en-US">
+
+  <head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+</head>
+
+<script>
+
+    /*
+
+    @Reference:
+        Taken from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+
+    */
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function beginSession() {
+
+        n_conditions = 3
+        indicies = Array.apply(null, {length: n_conditions}).map(Number.call, Number)
+        shuffleArray(indicies)
+        localStorage.setItem("indicies", indicies);
+        localStorage.setItem("currentIndex", 0);
+
+        start_trial = 'trial_' + indicies[0].toString() + '.html'
+        window.location = start_trial
+    }
+</script>
+
+<body>
+    <!-- The main header used across all the pages of our website -->
+
+    <header style="text-align: center;">
+      <h1>Picture perception study</h1>
+    </header>
+
+    <hr style="width: 80%; border-color: #dddddd;"/>
+
+    <div id="main-wrap">
+    
+        <!-- The main header used across all the pages of our website -->
+
+        <div id="left-side"></div>
+        <div id="content">
+
+            <p style="width: 50%; margin-left: 25%;">
+
+                Thank you for agreeing to take part in this study on picutre perception. During this study you will be shown 3 pairs of images, labelled (A) and (B), and be asked some questions regarding their appearance.
+            </p>
+
+            <div style="text-align: center;">
+                <a class="button" onclick="beginSession()">Begin study</a>
+            </div>
+
+        </div>
+        <div id="right-side"></div>
+    </div>
+</body>
+</html>
