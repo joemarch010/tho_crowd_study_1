@@ -126,12 +126,12 @@
     <div id="wrapper">
         <figure>
             <img src=stimuli/1_ref.png alt="Reference" style="width:100%" id="img1">
-            <figcaption> <b>(A)</b> </figcaption>
+            <figcaption> <b>Before</b> </figcaption>
         </figure>
 
         <figure>
             <img src=stimuli/1_dist.png alt="Reference" style="width:100%;" id="img1">
-            <figcaption> <b>(B)</b> </figcaption>
+            <figcaption> <b>After</b> </figcaption>
         </figure>
     </div>
 
@@ -143,51 +143,60 @@
     </p>
     <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
 
-        Which of the following options best describes how image (B) is different from image (A)?
+        Which of the following options best describes the difference between “before” (left) and “after” (right)?
     </p>
 
     <div id="list">
-    <b>Scene content has changed</b>
         <p style="margin-left: 5%;">
 
-            <label class="checkbox-container">Lighting has changed
-                <input type="checkbox" checked="checked" name="check1" onclick="onlyOne(this)" >
-                <span class="checkmark"></span>
-            </label>
-
-            <label class="checkbox-container">Objects have changed
+            <label class="checkbox-container">Objects in the scene have changed
                 <input type="checkbox" name="check1" onclick="onlyOne(this)" >
                 <span class="checkmark"></span>
             </label>
 
-            <label class="checkbox-container">Lighting and objects have changed
+            <label class="checkbox-container">Materials, colors, and/or paints of the objects in the scene have changed
                 <input type="checkbox" name="check1" onclick="onlyOne(this)" >
                 <span class="checkmark"></span>
             </label>
-        </p>
-    
 
-    <b>Image has been modified</b>
+            <label class="checkbox-container"> Lighting in the scene has changed
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
 
-        <p style="margin-left: 5%;"">
             <label class="checkbox-container">Camera settings have changed
                 <input type="checkbox" name="check1" onclick="onlyOne(this)" >
                 <span class="checkmark"></span>
             </label>
 
-            <label class="checkbox-container">Image has been digitally altered ('photoshopped')
+            <label class="checkbox-container"> “After” (right) is a digitally edited (“photoshopped”) version of “before” (left)
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container">Nothing has changed
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container">Other
                 <input type="checkbox" name="check1" onclick="onlyOne(this)" >
                 <span class="checkmark"></span>
             </label>
         </p>
+    </div>
 
-    <b>Other</b>
+    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
 
-        <p style="margin-left: 5%;" >
-            <input type="text" id="other1" name="other1" style="margin-left: 10px;" size="100">
-            <label for="other1" style="float: left; font-size: 14px;">(Please specify)</label>
+        Please describe the change.
+    </p>
+
+    <div id="list">
+        <p style="margin-left: 5%;">
+            <input type="text" name="description1" size="100">
         </p>
     </div>
+
 
 
     <hr style="width: 80%; border-color: #dddddd;"/>
@@ -198,13 +207,13 @@
     </p>
     <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
 
-        Does image (A) appear natural?
+        Does the “before” (left) image appear natural
     </p>
 
     <div id="list">
     <p style="margin-left: 5%;"">
         <label class="checkbox-container">Yes
-            <input type="checkbox" checked="checked" name="check2" onclick="onlyOne(this)" >
+            <input type="checkbox" name="check2" onclick="onlyOne(this)" >
             <span class="checkmark"></span>
         </label>
 
@@ -223,13 +232,13 @@
     </p>
     <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
 
-        Does image (B) appear natural?
+        Does the after (right) image appear natural
     </p>
 
     <div id="list">
     <p style="margin-left: 5%;"">
         <label class="checkbox-container">Yes
-            <input type="checkbox" checked="checked" name="check3" onclick="onlyOne(this)" >
+            <input type="checkbox" name="check3" onclick="onlyOne(this)" >
             <span class="checkmark"></span>
         </label>
 
