@@ -1,0 +1,267 @@
+<!doctype html>
+
+<html lang="en-US">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>Experiment</title>
+</head>
+
+
+<body style="background: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);" onload="setup()">
+
+    <script>
+
+        function setup() {
+
+            var warningText = document.getElementById("warning")
+            warningText.style.color = "white";
+
+            var currentIndex = localStorage.getItem("currentIndex");
+            var trial = currentIndex
+            localStorage.setItem("currentIndex", Number(currentIndex) + 1);
+            var indicies = JSON.parse("[" + localStorage.getItem("indicies") + "]");
+
+            document.getElementById('progress_text').innerText = 'Trial ' + (Number(trial) + 1).toString() + ' of ' + indicies.length.toString()
+        }
+
+        function isBlank(str) {
+
+            return (!str || str.trim().length === 0 || str === "");
+        }
+
+        function verifyAnswers() {
+
+            var q1Checkboxes = document.getElementsByName("check1")
+            var q1Otherbox = document.getElementById("other1")
+            var q2Checkboxes = document.getElementsByName("check2")
+            var q3Checkboxes = document.getElementsByName("check3")
+            var q1Checked = false
+            var q2Checked = false
+            var q3Checked = false
+
+            q1Checkboxes.forEach((item) => {
+                q1Checked = q1Checked || item.checked
+            })
+
+            q1Checked = q1Checked || !isBlank(q1Otherbox.value)
+
+            q2Checkboxes.forEach((item) => {
+                q2Checked = q2Checked || item.checked
+            })
+
+            q3Checkboxes.forEach((item) => {
+                q3Checked = q3Checked || item.checked
+            })
+
+
+            return q1Checked && q2Checked && q3Checked
+        }
+
+        function moveToNextTrial() {
+
+            var answersValid = verifyAnswers()
+
+            if (!answersValid) {
+
+                var warningText = document.getElementById("warning")
+                warningText.style.color = "red";
+            } else {
+
+                //Move
+                var warningText = document.getElementById("warning")
+                warningText.style.color = "white";
+
+                var currentIndex = localStorage.getItem("currentIndex");
+                var indicies = JSON.parse("[" + localStorage.getItem("indicies") + "]");
+
+                console.log(currentIndex)
+
+                if (currentIndex == indicies.length) {
+
+                     window.location = "end.html"
+                } else {
+
+                    var nextTrial = indicies[currentIndex]
+                    console.log(nextTrial)
+                    var nextHTML = "trial_" + nextTrial + ".html"
+
+                    window.location = nextHTML
+                }
+            }
+        }
+
+        function onlyOne(checkbox) {
+
+            value = localStorage.getItem("indicies");
+
+            var checkboxes = document.getElementsByName(checkbox.name)
+            checkboxes.forEach((item) => {
+                console.log('uncheck')
+                if (item !== checkbox) item.checked = false
+            })
+        }
+    </script>
+
+    <div style="position: sticky; top: 0; background-color: #ffffff; margin-top: 50px;">
+    <!-- <header style="text-align: center;"> -->
+        <p style="text-align: center;" id="progress_text">
+            
+        </p>
+        <hr style="width: 80%; border-color: #dddddd;"/>
+    <!-- </header> -->
+    </div>
+
+    <div id="main-wrap">
+    
+    <!-- The main header used across all the pages of our website -->
+
+    <div id="left-side"></div>
+    <div id="content">
+
+
+    <div id="wrapper">
+        <figure>
+            <img src=stimuli/6_ref.png alt="Reference" style="width:100%" id="img1">
+            <figcaption> <b>Before</b> </figcaption>
+        </figure>
+
+        <figure>
+            <img src=stimuli/6_dist.png alt="Reference" style="width:100%;" id="img1">
+            <figcaption> <b>After</b> </figcaption>
+        </figure>
+    </div>
+
+    <hr style="width: 80%; border-color: #dddddd;"/>
+
+
+    <p style="text-align: left; font-size: 18px; margin-left: 20%;">
+        <b>Question 1</b>
+    </p>
+    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
+
+        Which of the following options best describes the difference between “before” (left) and “after” (right)?
+    </p>
+
+    <div id="list">
+        <p style="margin-left: 5%;">
+
+            <label class="checkbox-container">Objects in the scene have changed
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container">Materials, colors, and/or paints of the objects in the scene have changed
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container"> Lighting in the scene has changed
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container">Camera settings have changed
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container"> “After” (right) is a digitally edited (“photoshopped”) version of “before” (left)
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container">Nothing has changed
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container">Other
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+        </p>
+    </div>
+
+    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
+
+        Please describe the change.
+    </p>
+
+    <div id="list">
+        <p style="margin-left: 5%;">
+            <input type="text" name="description1" size="100">
+        </p>
+    </div>
+
+
+
+    <hr style="width: 80%; border-color: #dddddd;"/>
+
+
+    <p style="text-align: left; font-size: 18px; margin-left: 20%;">
+        <b>Question 2</b>
+    </p>
+    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
+
+        Does the “before” (left) image appear natural
+    </p>
+
+    <div id="list">
+    <p style="margin-left: 5%;"">
+        <label class="checkbox-container">Yes
+            <input type="checkbox" name="check2" onclick="onlyOne(this)" >
+            <span class="checkmark"></span>
+        </label>
+
+        <label class="checkbox-container">No
+            <input type="checkbox" name="check2" onclick="onlyOne(this)" >
+            <span class="checkmark"></span>
+        </label>
+    </p>
+    </div>
+
+    <hr style="width: 80%; border-color: #dddddd;"/>
+
+
+    <p style="text-align: left; font-size: 18px; margin-left: 20%;">
+        <b>Question 3</b>
+    </p>
+    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
+
+        Does the after (right) image appear natural
+    </p>
+
+    <div id="list">
+    <p style="margin-left: 5%;"">
+        <label class="checkbox-container">Yes
+            <input type="checkbox" name="check3" onclick="onlyOne(this)" >
+            <span class="checkmark"></span>
+        </label>
+
+        <label class="checkbox-container">No
+            <input type="checkbox" name="check3" onclick="onlyOne(this)" >
+            <span class="checkmark"></span>
+        </label>
+    </p>
+    </div>
+
+    <hr style="width: 80%; border-color: #dddddd;"/>
+
+    <div style="text-align: center;">
+        <button type="button" onclick="moveToNextTrial()">Submit</button>
+        <p id="warning" style="color: black; font-size: 14px;">
+            (Please answer all questions)
+        </p>
+    </div>
+
+    </div>
+    <div id="right-side"></div>
+    
+    </div>
+</body>
+
+</html>
