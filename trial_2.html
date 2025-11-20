@@ -36,29 +36,50 @@
         function verifyAnswers() {
 
             var q1Checkboxes = document.getElementsByName("check1")
-            var q1Otherbox = document.getElementById("other1")
-            var q2Checkboxes = document.getElementsByName("check2")
-            var q3Checkboxes = document.getElementsByName("check3")
+            var q1OtherCheckbox = document.getElementById("q1Otherbox")
+            var q1Othertext = document.getElementById("q1OtherText")
             var q1Checked = false
-            var q2Checked = false
-            var q3Checked = false
 
             q1Checkboxes.forEach((item) => {
                 q1Checked = q1Checked || item.checked
             })
 
-            q1Checked = q1Checked || !isBlank(q1Otherbox.value)
+            if (q1Otherbox.checked && isBlank(q1Othertext.value)) {
 
-            q2Checkboxes.forEach((item) => {
-                q2Checked = q2Checked || item.checked
+                return false;
+            }
+
+            q1Checked = q1Checked
+
+            return q1Checked 
+        }
+
+        function getAnswer() {
+
+            var q1Checkboxes = document.getElementsByName("check1")
+            var q1OtherCheckbox = document.getElementById("q1Otherbox")
+            var q1Othertext = document.getElementById("q1OtherText")
+            var q1Checked = false
+            var result = ""
+
+            q1Checkboxes.forEach((item) => {
+                if (item.checked) {
+
+                    result = item.closest("label").textContent.trim() + ", N/A";
+                }
             })
 
-            q3Checkboxes.forEach((item) => {
-                q3Checked = q3Checked || item.checked
-            })
+            if (result != "") {
 
+                return result;
+            }
 
-            return q1Checked && q2Checked && q3Checked
+            if (q1Otherbox.checked) {
+
+                return "Other, " + q1Othertext.value;
+            }
+
+            return "Error"
         }
 
         function moveToNextTrial() {
@@ -71,12 +92,35 @@
                 warningText.style.color = "red";
             } else {
 
+                var currentIndex = localStorage.getItem("currentIndex");
+                var indicies = JSON.parse("[" + localStorage.getItem("indicies") + "]");
+
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "http://98.81.203.1:8000/index.php", true);
+                // xhr.open("POST", "http://localhost:8000/index.php", true);
+
+                xhr.setRequestHeader("Content-Type", "text/plain");
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        console.log("Response status:", xhr.status);
+                        console.log("Response text:", xhr.responseText);
+                    }
+                };
+
+                xhr.onerror = function() {
+                    console.error("Request failed!");
+                };
+
+                var observerID = localStorage.getItem("observerID");
+
+                xhr.send(observerID + ", " + indicies[currentIndex - 1] + ", " + getAnswer());
+
+
                 //Move
                 var warningText = document.getElementById("warning")
                 warningText.style.color = "white";
 
-                var currentIndex = localStorage.getItem("currentIndex");
-                var indicies = JSON.parse("[" + localStorage.getItem("indicies") + "]");
 
                 console.log(currentIndex)
 
@@ -141,9 +185,11 @@
     <p style="text-align: left; font-size: 18px; margin-left: 20%;">
         <b>Question 1</b>
     </p>
-    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
+    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px; margin-right: 20%;">
 
-        Which of the following options best describes the difference between “before” (left) and “after” (right)?
+        You are being shown two versions of the same photograph. Which of the following options best describes 
+        the difference in how the scene content appears between “before” (left) and “after” (right)?
+
     </p>
 
     <div id="list">
@@ -159,94 +205,25 @@
                 <span class="checkmark"></span>
             </label>
 
-            <label class="checkbox-container"> Lighting in the scene has changed
+            <label class="checkbox-container"> Lighting in the scene has changed (including time of day)
                 <input type="checkbox" name="check1" onclick="onlyOne(this)" >
                 <span class="checkmark"></span>
             </label>
 
-            <label class="checkbox-container">Camera settings have changed
+            <label class="checkbox-container">The scene appears unchanged
                 <input type="checkbox" name="check1" onclick="onlyOne(this)" >
                 <span class="checkmark"></span>
             </label>
 
-            <label class="checkbox-container"> “After” (right) is a digitally edited (“photoshopped”) version of “before” (left)
-                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+            <label class="checkbox-container">Other (Please describe)
+                <input type="checkbox" name="check1" id="q1Otherbox" onclick="onlyOne(this)" >
                 <span class="checkmark"></span>
             </label>
 
-            <label class="checkbox-container">Nothing has changed
-                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
-                <span class="checkmark"></span>
-            </label>
-
-            <label class="checkbox-container">Other
-                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
-                <span class="checkmark"></span>
-            </label>
+            <p style="margin-left: 5%;">
+                <input type="text" id="q1OtherText" size="100">
+            </p>
         </p>
-    </div>
-
-    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
-
-        Please describe the change.
-    </p>
-
-    <div id="list">
-        <p style="margin-left: 5%;">
-            <input type="text" name="description1" size="100">
-        </p>
-    </div>
-
-
-
-    <hr style="width: 80%; border-color: #dddddd;"/>
-
-
-    <p style="text-align: left; font-size: 18px; margin-left: 20%;">
-        <b>Question 2</b>
-    </p>
-    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
-
-        Does the “before” (left) image appear natural
-    </p>
-
-    <div id="list">
-    <p style="margin-left: 5%;"">
-        <label class="checkbox-container">Yes
-            <input type="checkbox" name="check2" onclick="onlyOne(this)" >
-            <span class="checkmark"></span>
-        </label>
-
-        <label class="checkbox-container">No
-            <input type="checkbox" name="check2" onclick="onlyOne(this)" >
-            <span class="checkmark"></span>
-        </label>
-    </p>
-    </div>
-
-    <hr style="width: 80%; border-color: #dddddd;"/>
-
-
-    <p style="text-align: left; font-size: 18px; margin-left: 20%;">
-        <b>Question 3</b>
-    </p>
-    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px;">
-
-        Does the after (right) image appear natural
-    </p>
-
-    <div id="list">
-    <p style="margin-left: 5%;"">
-        <label class="checkbox-container">Yes
-            <input type="checkbox" name="check3" onclick="onlyOne(this)" >
-            <span class="checkmark"></span>
-        </label>
-
-        <label class="checkbox-container">No
-            <input type="checkbox" name="check3" onclick="onlyOne(this)" >
-            <span class="checkmark"></span>
-        </label>
-    </p>
     </div>
 
     <hr style="width: 80%; border-color: #dddddd;"/>
@@ -254,7 +231,7 @@
     <div style="text-align: center;">
         <button type="button" onclick="moveToNextTrial()">Submit</button>
         <p id="warning" style="color: black; font-size: 14px;">
-            (Please answer all questions)
+            (Please the question)
         </p>
     </div>
 

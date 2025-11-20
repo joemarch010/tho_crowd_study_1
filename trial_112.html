@@ -1,0 +1,244 @@
+<!doctype html>
+
+<html lang="en-US">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>Experiment</title>
+</head>
+
+
+<body style="background: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);" onload="setup()">
+
+    <script>
+
+        function setup() {
+
+            var warningText = document.getElementById("warning")
+            warningText.style.color = "white";
+
+            var currentIndex = localStorage.getItem("currentIndex");
+            var trial = currentIndex
+            localStorage.setItem("currentIndex", Number(currentIndex) + 1);
+            var indicies = JSON.parse("[" + localStorage.getItem("indicies") + "]");
+
+            document.getElementById('progress_text').innerText = 'Trial ' + (Number(trial) + 1).toString() + ' of ' + indicies.length.toString()
+        }
+
+        function isBlank(str) {
+
+            return (!str || str.trim().length === 0 || str === "");
+        }
+
+        function verifyAnswers() {
+
+            var q1Checkboxes = document.getElementsByName("check1")
+            var q1OtherCheckbox = document.getElementById("q1Otherbox")
+            var q1Othertext = document.getElementById("q1OtherText")
+            var q1Checked = false
+
+            q1Checkboxes.forEach((item) => {
+                q1Checked = q1Checked || item.checked
+            })
+
+            if (q1Otherbox.checked && isBlank(q1Othertext.value)) {
+
+                return false;
+            }
+
+            q1Checked = q1Checked
+
+            return q1Checked 
+        }
+
+        function getAnswer() {
+
+            var q1Checkboxes = document.getElementsByName("check1")
+            var q1OtherCheckbox = document.getElementById("q1Otherbox")
+            var q1Othertext = document.getElementById("q1OtherText")
+            var q1Checked = false
+            var result = ""
+
+            q1Checkboxes.forEach((item) => {
+                if (item.checked) {
+
+                    result = item.closest("label").textContent.trim() + ", N/A";
+                }
+            })
+
+            if (result != "") {
+
+                return result;
+            }
+
+            if (q1Otherbox.checked) {
+
+                return "Other, " + q1Othertext.value;
+            }
+
+            return "Error"
+        }
+
+        function moveToNextTrial() {
+
+            var answersValid = verifyAnswers()
+
+            if (!answersValid) {
+
+                var warningText = document.getElementById("warning")
+                warningText.style.color = "red";
+            } else {
+
+                var currentIndex = localStorage.getItem("currentIndex");
+                var indicies = JSON.parse("[" + localStorage.getItem("indicies") + "]");
+
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "http://98.81.203.1:8000/index.php", true);
+                // xhr.open("POST", "http://localhost:8000/index.php", true);
+
+                xhr.setRequestHeader("Content-Type", "text/plain");
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        console.log("Response status:", xhr.status);
+                        console.log("Response text:", xhr.responseText);
+                    }
+                };
+
+                xhr.onerror = function() {
+                    console.error("Request failed!");
+                };
+
+                var observerID = localStorage.getItem("observerID");
+
+                xhr.send(observerID + ", " + indicies[currentIndex - 1] + ", " + getAnswer());
+
+
+                //Move
+                var warningText = document.getElementById("warning")
+                warningText.style.color = "white";
+
+
+                console.log(currentIndex)
+
+                if (currentIndex == indicies.length) {
+
+                     window.location = "end.html"
+                } else {
+
+                    var nextTrial = indicies[currentIndex]
+                    console.log(nextTrial)
+                    var nextHTML = "trial_" + nextTrial + ".html"
+
+                    window.location = nextHTML
+                }
+            }
+        }
+
+        function onlyOne(checkbox) {
+
+            value = localStorage.getItem("indicies");
+
+            var checkboxes = document.getElementsByName(checkbox.name)
+            checkboxes.forEach((item) => {
+                console.log('uncheck')
+                if (item !== checkbox) item.checked = false
+            })
+        }
+    </script>
+
+    <div style="position: sticky; top: 0; background-color: #ffffff; margin-top: 50px;">
+    <!-- <header style="text-align: center;"> -->
+        <p style="text-align: center;" id="progress_text">
+            
+        </p>
+        <hr style="width: 80%; border-color: #dddddd;"/>
+    <!-- </header> -->
+    </div>
+
+    <div id="main-wrap">
+    
+    <!-- The main header used across all the pages of our website -->
+
+    <div id="left-side"></div>
+    <div id="content">
+
+
+    <div id="wrapper">
+        <figure>
+            <img src=stimuli/112_ref.png alt="Reference" style="width:100%" id="img1">
+            <figcaption> <b>Before</b> </figcaption>
+        </figure>
+
+        <figure>
+            <img src=stimuli/112_dist.png alt="Reference" style="width:100%;" id="img1">
+            <figcaption> <b>After</b> </figcaption>
+        </figure>
+    </div>
+
+    <hr style="width: 80%; border-color: #dddddd;"/>
+
+
+    <p style="text-align: left; font-size: 18px; margin-left: 20%;">
+        <b>Question 1</b>
+    </p>
+    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px; margin-right: 20%;">
+
+        You are being shown two versions of the same photograph. Which of the following options best describes 
+        the difference in how the scene content appears between “before” (left) and “after” (right)?
+
+    </p>
+
+    <div id="list">
+        <p style="margin-left: 5%;">
+
+            <label class="checkbox-container">Objects in the scene have changed
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container">Materials, colors, and/or paints of the objects in the scene have changed
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container"> Lighting in the scene has changed (including time of day)
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container">The scene appears unchanged
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container">Other (Please describe)
+                <input type="checkbox" name="check1" id="q1Otherbox" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <p style="margin-left: 5%;">
+                <input type="text" id="q1OtherText" size="100">
+            </p>
+        </p>
+    </div>
+
+    <hr style="width: 80%; border-color: #dddddd;"/>
+
+    <div style="text-align: center;">
+        <button type="button" onclick="moveToNextTrial()">Submit</button>
+        <p id="warning" style="color: black; font-size: 14px;">
+            (Please the question)
+        </p>
+    </div>
+
+    </div>
+    <div id="right-side"></div>
+    
+    </div>
+</body>
+
+</html>

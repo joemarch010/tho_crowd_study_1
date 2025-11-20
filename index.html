@@ -25,11 +25,13 @@
 
     function beginSession() {
 
-        n_conditions = 32
+        n_conditions = 158
         indicies = Array.apply(null, {length: n_conditions}).map(Number.call, Number)
         shuffleArray(indicies)
+        indicies = indicies.slice(0, 30)
         localStorage.setItem("indicies", indicies);
         localStorage.setItem("currentIndex", 0);
+        localStorage.setItem("observerID", Math.floor(Date.now() / 1000));
 
         start_trial = 'trial_' + indicies[0].toString() + '.html'
         window.location = start_trial
@@ -54,7 +56,7 @@
 
             <p style="width: 50%; margin-left: 25%;">
 
-                Thank you for agreeing to take part in this study on picutre perception. During this study you will be shown 32 pairs of images, labelled (A) and (B), and be asked some questions regarding their appearance.
+                Thank you for agreeing to take part in this study on picutre perception. During this study you will be shown 30 pairs of images, labelled (A) and (B), and be asked some questions regarding their appearance.
             </p>
 
             <div style="text-align: center;">
