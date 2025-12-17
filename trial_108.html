@@ -92,7 +92,6 @@
                 var currentIndex = localStorage.getItem("currentIndex");
                 var indicies = JSON.parse("[" + localStorage.getItem("indicies") + "]");
 
-
                 var observerID = localStorage.getItem("observerID");
                 const payload = observerID + ", " + indicies[currentIndex - 1] + ", " + getAnswer();
                 const output = document.getElementById("output");
@@ -218,7 +217,6 @@
 
         You are being shown two versions of the same photograph. Which of the following options best describes 
         the difference in how the scene content appears between “before” (left) and “after” (right)?
-
     </p>
 
     <div id="list">
@@ -240,6 +238,11 @@
             </label>
 
             <label class="checkbox-container">The scene appears unchanged
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container">Scene appears content unchanged but images appear digitally altered
                 <input type="checkbox" name="check1" onclick="onlyOne(this)" >
                 <span class="checkmark"></span>
             </label>

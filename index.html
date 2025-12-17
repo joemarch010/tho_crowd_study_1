@@ -25,8 +25,13 @@
 
     function beginSession() {
 
-        n_conditions = 158
+        n_sentinels = 3
+        n_conditions = 167 - n_sentinels
         indicies = Array.apply(null, {length: n_conditions}).map(Number.call, Number)
+        indicies.push(158)
+        indicies.push(159)
+        indicies.push(160)
+        
         shuffleArray(indicies)
         indicies = indicies.slice(0, 30)
         localStorage.setItem("indicies", indicies);
@@ -35,7 +40,7 @@
 
         start_trial = 'trial_' + indicies[0].toString() + '.html'
         window.location = start_trial
-    }
+    } 
 </script>
 
 <body>
