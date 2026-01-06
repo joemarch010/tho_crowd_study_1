@@ -26,14 +26,16 @@
     function beginSession() {
 
         n_sentinels = 3
-        n_conditions = 167 - n_sentinels
+        n_conditions = 170
         indicies = Array.apply(null, {length: n_conditions}).map(Number.call, Number)
+        
+        shuffleArray(indicies)
+        indicies = indicies.slice(0, 30 - n_sentinels)
         indicies.push(158)
         indicies.push(159)
         indicies.push(160)
-        
         shuffleArray(indicies)
-        indicies = indicies.slice(0, 30)
+        
         localStorage.setItem("indicies", indicies);
         localStorage.setItem("currentIndex", 0);
         localStorage.setItem("observerID", Math.floor(Date.now() / 1000));
