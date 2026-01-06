@@ -51,8 +51,17 @@
 
             q1Checked = q1Checked
 
-            return q1Checked 
+            var q2Checkboxes = document.getElementsByName("check1")
+            var q2Checked = false
+
+            q2Checkboxes.forEach((item) => {
+                q2Checked = q2Checked || item.checked
+            })
+
+
+            return q1Checked && q2Checked
         }
+
 
         function getAnswer() {
 
@@ -79,6 +88,21 @@
             return "Error"
         }
 
+        function getQ2Answer() {
+
+            var q2Checkboxes = document.getElementsByName("check2")
+            var result = ""
+
+            q2Checkboxes.forEach((item) => {
+                if (item.checked && item != q1Otherbox) {
+                    result = item.closest("label").textContent.trim()
+                }
+            })
+
+            return result
+        }
+
+
         async function moveToNextTrial() {
 
             var answersValid = verifyAnswers()
@@ -93,7 +117,7 @@
                 var indicies = JSON.parse("[" + localStorage.getItem("indicies") + "]");
 
                 var observerID = localStorage.getItem("observerID");
-                const payload = observerID + ", " + indicies[currentIndex - 1] + ", " + getAnswer();
+                const payload = observerID + ", " + indicies[currentIndex - 1] + ", " + getAnswer() + ", " + getQ2Answer();
                 const output = document.getElementById("output");
 
                 try {
@@ -115,36 +139,6 @@
                 } catch (err) {
                     console.error("Fetch error:", err);
                 }
-
-                // const xhr = new XMLHttpRequest();
-                // xhr.open("POST", "https://www.tonemapping-experiment-1scxxfsfe2345d3.com/index.php", true);
-                // // xhr.open("POST", "http://localhost:8000/index.php", true);
-
-                // xhr.setRequestHeader("Content-Type", "text/plain");
-
-                // xhr.onreadystatechange = function() {
-                //     if (xhr.readyState === XMLHttpRequest.DONE) {
-                //         const output = document.getElementById("output");
-                //         if (xhr.status >= 200 && xhr.status < 300) {
-                //             try {
-                //             const data = JSON.parse(xhr.responseText);
-                //             output.textContent = "API responded: " + JSON.stringify(data, null, 2);
-                //             } catch (e) {
-                //             output.textContent = "Invalid JSON response: " + xhr.responseText;
-                //             }
-                //         } else {
-                //             output.textContent = "Error " + xhr.status + ": " + xhr.statusText;
-                //         }
-                //     }
-                // };
-
-                // xhr.onerror = function() {
-                //     console.error("Request failed!");
-                // };
-
-                // var observerID = localStorage.getItem("observerID");
-
-                // xhr.send(observerID + ", " + indicies[currentIndex - 1] + ", " + getAnswer());
 
                 //Move
                 var warningText = document.getElementById("warning")
@@ -258,12 +252,36 @@
         </p>
     </div>
 
+    <p style="text-align: left; font-size: 18px; margin-left: 20%;">
+        <b>Question 2</b>
+    </p>
+    <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px; margin-right: 20%;">
+
+        Does it look like “after” (right) image is a digitally edited version of the “before” (left) image?
+    </p>
+
+    <div id="list">
+        <p style="margin-left: 5%;">
+
+            <label class="checkbox-container">Yes
+                <input type="checkbox" name="check2" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="checkbox-container">No
+                <input type="checkbox" name="check2" onclick="onlyOne(this)" >
+                <span class="checkmark"></span>
+            </label>
+        </p>
+    </div>
+
+
     <hr style="width: 80%; border-color: #dddddd;"/>
 
     <div style="text-align: center;">
         <button type="button" onclick="moveToNextTrial()">Submit</button>
         <p id="warning" style="color: black; font-size: 14px;">
-            (Please fill in the description box)
+            (Please answer all questions fully)
         </p>
     </div>
 
