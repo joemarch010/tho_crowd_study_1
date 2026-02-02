@@ -25,15 +25,18 @@
 
     function beginSession() {
 
-        n_sentinels = 3
+        n_sentinels = 6
         n_conditions = 157
         indicies = Array.apply(null, {length: n_conditions}).map(Number.call, Number)
         
         shuffleArray(indicies)
-        indicies = indicies.slice(0, 30 - n_sentinels)
+        indicies = indicies.slice(0, 164 - n_sentinels)
         indicies.push(158)
         indicies.push(159)
         indicies.push(160)
+        indicies.push(161)
+        indicies.push(162)
+        indicies.push(163)
         shuffleArray(indicies)
         
         localStorage.setItem("indicies", indicies);
@@ -63,7 +66,7 @@
 
             <p style="width: 50%; margin-left: 25%;">
 
-                Thank you for agreeing to take part in this study on picutre perception. During this study you will be shown 30 pairs of images, labelled (A) and (B), and be asked some questions regarding their appearance.
+                Thank you for agreeing to take part in this study on picutre perception. During this study you will be shown 164 pairs of images, labelled (A) and (B), and be asked some questions regarding their appearance.
             </p>
 
             <div style="text-align: center;">
