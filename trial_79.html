@@ -36,54 +36,32 @@
         function verifyAnswers() {
 
             var q1Checkboxes = document.getElementsByName("check1")
-            var q1OtherCheckbox = document.getElementById("q1Otherbox")
-            var q1Othertext = document.getElementById("q1OtherText")
             var q1Checked = false
 
             q1Checkboxes.forEach((item) => {
                 q1Checked = q1Checked || item.checked
             })
 
-            if (q1Otherbox.checked && isBlank(q1Othertext.value)) {
-
-                return false;
-            }
-
-            q1Checked = q1Checked
-
-            var q2Checkboxes = document.getElementsByName("check1")
-            var q2Checked = false
-
-            q2Checkboxes.forEach((item) => {
-                q2Checked = q2Checked || item.checked
-            })
-
-
-            return q1Checked && q2Checked
+            return q1Checked 
         }
 
 
         function getAnswer() {
 
             var q1Checkboxes = document.getElementsByName("check1")
-            var q1OtherCheckbox = document.getElementById("q1Otherbox")
-            var q1Othertext = document.getElementById("q1OtherText")
             var q1Checked = false
             var result = ""
 
             q1Checkboxes.forEach((item) => {
-                if (item.checked && item != q1Otherbox) {
-                    result = item.closest("label").textContent.trim() + ", N/A";
+                if (item.checked) {
+                    result = item.closest("label").textContent.trim();
                 }
             })
 
             if (result != "") {
 
                 return result;
-            }
-
-            return "Other, " + q1Othertext.value;
-            
+            }            
 
             return "Error"
         }
@@ -191,13 +169,7 @@
 
     <div id="wrapper">
         <figure>
-            <img src=stimuli/79_ref.png alt="Reference" style="width:100%" id="img1">
-            <figcaption> <b>Before</b> </figcaption>
-        </figure>
-
-        <figure>
-            <img src=stimuli/79_dist.png alt="Reference" style="width:100%;" id="img1">
-            <figcaption> <b>After</b> </figcaption>
+            <img src=stimuli/20_1_ref.png alt="Image" style="width:75%" id="img1">
         </figure>
     </div>
 
@@ -209,41 +181,40 @@
     </p>
     <p style="text-align: left; margin-left: calc(20% + 30px); margin-bottom: 30px; margin-right: 20%;">
 
-        You are being shown two versions of the same photograph. Which of the following options best describes 
-        the difference in how the scene content appears between “before” (left) and “after” (right)?
+        What time of day is depicted in this picture?
     </p>
 
     <div id="list">
         <p style="margin-left: 5%;">
 
-            <label class="checkbox-container">Objects in the scene have changed
+            <label class="checkbox-container">Morning
                 <input type="checkbox" name="check1" onclick="onlyOne(this)" >
                 <span class="checkmark"></span>
             </label>
 
-            <label class="checkbox-container">Materials, colors, and/or paints of the objects in the scene have changed
+            <label class="checkbox-container">Noon
                 <input type="checkbox" name="check1" onclick="onlyOne(this)" >
                 <span class="checkmark"></span>
             </label>
 
-            <label class="checkbox-container"> Lighting in the scene has changed (including time of day)
+            <label class="checkbox-container"> Afternoon
                 <input type="checkbox" name="check1" onclick="onlyOne(this)" >
                 <span class="checkmark"></span>
             </label>
 
-            <label class="checkbox-container">The scene appears unchanged (despite any digital image manipulation)
+            <label class="checkbox-container"> Evening
                 <input type="checkbox" name="check1" onclick="onlyOne(this)" >
                 <span class="checkmark"></span>
             </label>
 
-            <label class="checkbox-container">Other (Please describe)
-                <input type="checkbox" name="check1" id="q1Otherbox" onclick="onlyOne(this)" >
+            <label class="checkbox-container"> Night
+                <input type="checkbox" name="check1" onclick="onlyOne(this)" >
                 <span class="checkmark"></span>
             </label>
 
-            <p style="margin-left: 5%;">
+            <!-- <p style="margin-left: 5%;">
                 <input type="text" id="q1OtherText" size="100">
-            </p>
+            </p> -->
         </p>
     </div>
 
